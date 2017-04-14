@@ -100,7 +100,7 @@ public class RandomStrings {
             
             dictionary = Arrays.stream(tmp)
                     .parallel()
-                    .filter(s -> s.length() > 4)
+                    .filter(s -> s.length() > 3)
                     .collect(Collectors.toCollection(ArrayList<String>::new));
         } catch (java.io.IOException ex){
             System.out.println(ex);
