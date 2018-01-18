@@ -1,16 +1,17 @@
 package randomstrings;
 
-import java.util.Arrays;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.stream.IntStream;
 import java.util.stream.Collectors;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import java.util.ArrayList;
 import java.util.List;
-import static java.nio.file.Files.readAllBytes;
-import static java.nio.file.Paths.get;
 
 /**
  *
@@ -26,7 +27,11 @@ public class RandomStrings {
                 "Random uppercase and lower case letters",
                     "Random words","Random words and numbers",
                     "Random words with punctuation and numbers"};
-    private final List<String> dictionary;
+    private List<String> dictionary;
+
+    public void setDictionary(List<String> dictionary) {
+        this.dictionary = dictionary;
+    }
     
     private void randomWords(Random rn, int strings){
         inputStrings = new String[strings];        
@@ -35,7 +40,7 @@ public class RandomStrings {
             try (IntStream ints = rn.ints(rn.nextInt(1)+2,0,dictionary.size())){
                 inputStrings[i] = ints.parallel()
                         .mapToObj(dictionary::get)
-                        .map(String::toLowerCase)
+                        //.map(String::toLowerCase)
                         .collect(Collectors.joining(""));
 //                        .reduce("", String::concat);
             }
@@ -58,13 +63,11 @@ public class RandomStrings {
             
         }
         
-        Arrays.sort(inputStrings);
+        //Arrays.sort(inputStrings);
 //        System.out.println(Arrays.toString(inputStrings));
     }
     
-    public RandomStrings(List<String> dictionary){
-        this.dictionary = dictionary;
-        
+    public RandomStrings() {
         //setup swing components
         frame = new JFrame("String Generator");
         frame.setResizable(false);        
@@ -81,6 +84,11 @@ public class RandomStrings {
         
         frame.setVisible(false);        
     }
+    
+    public RandomStrings(List<String> dictionary){
+        this();
+        this.dictionary = dictionary;
+    }
 
     public static int enumerateInput(int num, String input){
         if (input.equals(OPTIONS[num])) return num;
@@ -94,7 +102,21 @@ public class RandomStrings {
 
         List<String> dictionary = new ArrayList<>();
         
+        try (InputStream is = RandomStrings.class.getResourceAsStream("words.txt");
+                BufferedReader reader = new BufferedReader(new InputStreamReader(is));){
+            String line;
+            while ((line = reader.readLine()) != null) {
+                dictionary.add(line.trim());
+            }
+        } catch (NullPointerException | IOException e) {
+            JOptionPane.showMessageDialog(null, "error reading file");
+            System.exit(-1);
+        }
+        
+      
+        /*
         try {
+            
             String[] tmp = new String(readAllBytes(get("data/words.txt")))
                     .trim().split("\n");
             
@@ -105,6 +127,7 @@ public class RandomStrings {
         } catch (java.io.IOException ex){
             System.out.println(ex);
         }
+        */
         
         System.out.println(dictionary.size());
         RandomStrings rs = new RandomStrings(dictionary);
