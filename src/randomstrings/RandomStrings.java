@@ -27,12 +27,8 @@ public class RandomStrings {
                 "Random uppercase and lower case letters",
                     "Random words","Random words and numbers",
                     "Random words with punctuation and numbers"};
-    private List<String> dictionary;
-
-    public void setDictionary(List<String> dictionary) {
-        this.dictionary = dictionary;
-    }
-    
+    private final List<String> dictionary;
+      
     private void randomWords(Random rn, int strings){
         inputStrings = new String[strings];        
         
@@ -66,8 +62,8 @@ public class RandomStrings {
         //Arrays.sort(inputStrings);
 //        System.out.println(Arrays.toString(inputStrings));
     }
-    
-    public RandomStrings() {
+        
+    public RandomStrings(List<String> dictionary){
         //setup swing components
         frame = new JFrame("String Generator");
         frame.setResizable(false);        
@@ -82,11 +78,7 @@ public class RandomStrings {
         frame.setAutoRequestFocus(true);
         frame.setLocationRelativeTo(null);
         
-        frame.setVisible(false);        
-    }
-    
-    public RandomStrings(List<String> dictionary){
-        this();
+        frame.setVisible(false);  
         this.dictionary = dictionary;
     }
 
