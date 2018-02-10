@@ -30,14 +30,14 @@ public class RandomStrings {
     private final List<String> dictionary;
       
     private void randomWords(Random rn, int strings){
-        inputStrings = new String[strings];        
+        inputStrings = new String[strings];
         
         for (int i = 0; i < inputStrings.length; i++){
-            try (IntStream ints = rn.ints(rn.nextInt(1)+2,0,dictionary.size())){
+            try (IntStream ints = rn.ints(rn.nextInt(2)+2,0,dictionary.size())){
                 inputStrings[i] = ints.parallel()
                         .mapToObj(dictionary::get)
-                        //.map(String::toLowerCase)
-                        .collect(Collectors.joining(""));
+                        .map(String::toLowerCase)
+                        .collect(Collectors.joining(" "));
 //                        .reduce("", String::concat);
             }
         }
@@ -94,7 +94,7 @@ public class RandomStrings {
 
         List<String> dictionary = new ArrayList<>();
         
-        try (InputStream is = RandomStrings.class.getResourceAsStream("words.txt");
+        try (InputStream is = RandomStrings.class.getResourceAsStream("_words.txt");
                 BufferedReader reader = new BufferedReader(new InputStreamReader(is));){
             String line;
             while ((line = reader.readLine()) != null) {
